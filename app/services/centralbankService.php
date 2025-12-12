@@ -45,12 +45,12 @@ function listIslandProperties(): array
     );
 }
 
-function updateIslandProperties(...$args): array
+function updateIslandProperties(...$props): array
 {
     $properties = listIslandProperties();
 
-    foreach (array_keys($args) as $arg) {
-        $properties['island'][$arg] = $args[$arg];
+    foreach (array_keys($props) as $propsKey) {
+        $properties['island'][$propsKey] = $props[$propsKey];
     }
 
     $properties = array_merge(
