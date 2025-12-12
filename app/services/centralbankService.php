@@ -75,7 +75,7 @@ function getAccountBalance(): array
         'accountInfo',
         [
             'user' => $_ENV['CENTRALBANK_USER'],
-            "api_key" => $_ENV['CENTRALBANK_API_KEY']
+            'api_key' => $_ENV['CENTRALBANK_API_KEY']
         ]
     );
 }
@@ -87,8 +87,8 @@ function createTransferCode(?string $user = null, ?string $api_key = null, ?int 
         'withdraw',
         [
             'user' => $user ?? $_ENV['CENTRALBANK_USER'],
-            "api_key" => $api_key ?? $_ENV['CENTRALBANK_API_KEY'],
-            "amount" => $amount
+            'api_key' => $api_key ?? $_ENV['CENTRALBANK_API_KEY'],
+            'amount' => $amount
         ]
     );
 }
