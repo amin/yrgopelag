@@ -6,10 +6,8 @@ function _fetchFromCentralbank(string $endpoint): array
 {
     $ch = curl_init();
 
-    curl_setopt_array($ch, [
-        CURLOPT_URL => $_ENV['CENTRALBANK_API_URL'] . $endpoint,
-        CURLOPT_RETURNTRANSFER => true
-    ]);
+    curl_setopt($ch, CURLOPT_URL, $_ENV['CENTRALBANK_API_URL'] . $endpoint);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     $data = curl_exec($ch);
 
@@ -20,13 +18,11 @@ function _postToCentralbank(string $endpoint, array $params): array
 {
     $ch = curl_init();
 
-    curl_setopt_array($ch, [
-        CURLOPT_URL => $_ENV['CENTRALBANK_API_URL'] . $endpoint,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => json_encode($params),
-    ]);
+    curl_setopt($ch, CURLOPT_URL, $_ENV['CENTRALBANK_API_URL'] . $endpoint);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
 
     $data = curl_exec($ch);
 
