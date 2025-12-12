@@ -38,7 +38,7 @@ function getIslands(): array
     return _fetchFromCentralbank('islands');
 }
 
-function getIslandProperties(): array
+function listIslandProperties(): array
 {
     return _postToCentralbank(
         'islandFeatures',
@@ -51,7 +51,7 @@ function getIslandProperties(): array
 
 function updateIslandProperties(...$args): array
 {
-    $properties = getIslandProperties();
+    $properties = listIslandProperties();
 
     foreach (array_keys($args) as $arg) {
         $properties['island'][$arg] = $args[$arg];
@@ -73,7 +73,7 @@ function updateIslandProperties(...$args): array
 }
 
 
-function getBalance(): array
+function getAccountBalance(): array
 {
     return _postToCentralbank(
         'accountInfo',
