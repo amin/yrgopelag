@@ -1,0 +1,29 @@
+meta {
+  name: Record a visit
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://yrgopelag.se/centralbank/receipt
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user": "Amin",
+    "api_key": "{{api_key}}",
+    "island_id": 10,
+    "guest_name": "Rune",
+    "arrival_date": "2025-01-05",
+    "departure_date": "2025-01-07",
+    "features_used": [],
+    "star_rating": 5
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

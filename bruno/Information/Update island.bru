@@ -1,0 +1,36 @@
+meta {
+  name: Update island
+  type: http
+  seq: 4
+}
+
+post {
+  url: https://www.yrgopelag.se/centralbank/islands
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "islandName": "Greenland",
+    "hotelName": "Oceanview Resort",
+    "url": "https://yrgopelag.amincident.se",
+    "stars": 4,
+    "user": "Amin",
+    "api_key": "{{api_key}}",
+    "features": {
+      "water": {
+        "basic": "pool"
+      },
+      "games": {
+        "superior": "casino",
+        "premium": "PS5"
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

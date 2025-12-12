@@ -1,0 +1,22 @@
+meta {
+  name: Deposit transferCode
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://yrgopelag.se/centralbank/deposit
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {"user": "Amin", "transferCode": "0165b59e-ed3e-4c72-97d6-85e7442deb7c"}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+}

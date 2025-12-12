@@ -1,0 +1,36 @@
+meta {
+  name: Widthdraw transferCode
+  type: http
+  seq: 2
+}
+
+post {
+  url: https://www.yrgopelag.se/centralbank/withdraw
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: 
+  value: 
+  placement: header
+}
+
+body:json {
+  {
+    "user": "Rune",
+    "api_key": "10524e49-1955-484b-9368-9195f98bb7be",
+    "amount": 20
+  }
+}
+
+vars:pre-request {
+  api_key: 36445e0e-cabf-4184-9366-0d4ccf8bee3d
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+}

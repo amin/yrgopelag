@@ -1,0 +1,20 @@
+meta {
+  name: List island features
+  type: http
+  seq: 1
+}
+
+post {
+  url: https://yrgopelag.se/centralbank/islandFeatures
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {"user": "Amin", "api_key": "{{api_key}}"}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
