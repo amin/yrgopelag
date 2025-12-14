@@ -48,24 +48,26 @@ function listIslandProperties(): array
 function updateIslandProperties(...$props): array
 {
     $properties = listIslandProperties();
+    $features = [];
 
     foreach (array_keys($props) as $propsKey) {
         $properties['island'][$propsKey] = $props[$propsKey];
     }
 
-    $properties = array_merge(
+    foreach ($properties['features'] as $f) {
+        $features[$f['activity']][$f['tier']] = $f['feature'];
+    }
+
+    $postData = array_merge(
         $properties['island'],
         [
             'user' => $_ENV['CENTRALBANK_USER'],
             'api_key' => $_ENV['CENTRALBANK_API_KEY'],
-            'features' => array_values($properties['features'])
+            'features' => array_merge_recursive($features, $props['features'] ?? [])
         ]
     );
 
-    return _postToCentralbank(
-        'islands',
-        $properties
-    );
+    return _postToCentralbank('islands', $postData);
 }
 
 
