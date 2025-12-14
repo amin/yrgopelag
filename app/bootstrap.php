@@ -2,10 +2,13 @@
 
 define('AVAILABLE_FEATURES', json_decode(file_get_contents(__DIR__ . '/../database/features.json'), true));
 
-require_once __DIR__ . '/helpers/getFeatureAsArray.php';
-
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->safeLoad();
+
+foreach (glob(__DIR__ . '/helpers/*.php') as $file) {
+    require_once $file;
+}
+
 
 foreach (glob(__DIR__ . '/services/*.php') as $file) {
     require_once $file;
