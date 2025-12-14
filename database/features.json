@@ -1,7 +1,7 @@
-{
+{   
   "water": {
-    "economy": "bathtub",
-    "basic": "pool",
+    "economy": "pool",
+    "basic": "scuba diving",
     "premium": "olympic pool",
     "superior": "waterpark with fire and minibar"
   },
@@ -17,10 +17,10 @@
     "premium": "trike",
     "superior": "four-wheeled motorized beast"
   },
-  "cozy": {
-    "economy": "bad book",
-    "basic": "good book",
-    "premium": "library and a fireplace",
-    "superior": "nobel prize winner in literature reads a book for you"
+  "hotel-specific": {
+    "economy": "",
+    "basic": "",
+    "premium": "",
+    "superior": ""
   }
 }
