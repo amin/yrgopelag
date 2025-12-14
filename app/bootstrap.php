@@ -9,7 +9,6 @@ foreach (glob(__DIR__ . '/helpers/*.php') as $file) {
     require_once $file;
 }
 
-
 foreach (glob(__DIR__ . '/services/*.php') as $file) {
     require_once $file;
 }

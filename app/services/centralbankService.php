@@ -63,7 +63,7 @@ function updateIslandProperties(...$props): array
         [
             'user' => $_ENV['CENTRALBANK_USER'],
             'api_key' => $_ENV['CENTRALBANK_API_KEY'],
-            'features' => array_merge_recursive($features, $props['features'] ?? [])
+            'features' => array_replace_recursive($features, $props['features'] ?? [])
         ]
     );
 
