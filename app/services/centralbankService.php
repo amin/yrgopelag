@@ -50,8 +50,8 @@ function updateIslandProperties(...$props): array
     $properties = listIslandProperties();
     $features = [];
 
-    foreach (array_keys($props) as $propsKey) {
-        $properties['island'][$propsKey] = $props[$propsKey];
+    foreach ($props as $key => $value) {
+        $properties['island'][$key] = $value;
     }
 
     foreach ($properties['features'] as $f) {
