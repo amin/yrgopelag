@@ -45,7 +45,7 @@ function listIslandProperties(): array
     );
 }
 
-function updateIslandProperties(...$props): array
+function setIslandProperties(...$props): array
 {
     $properties = listIslandProperties();
     $features = [];
