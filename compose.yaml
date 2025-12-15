@@ -1,0 +1,22 @@
+services:
+  web:
+    image: trafex/php-nginx:latest
+    ports:
+      - "${APP_PORT}:8080"
+    volumes:
+      - .:/var/www/html
+      - ./conf/nginx.conf:/etc/nginx/conf.d/default.conf
+  db:
+    image: postgres:15.15
+    restart: always
+    privileged: true
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+volumes:
+  pgdata:
