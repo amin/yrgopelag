@@ -12,37 +12,45 @@ require_once __DIR__ . '/../app/bootstrap.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/assets/stylesheet.css">
 </head>
 
 <body>
-    <form action="/app/">
-        <label for="name">Name</label>
-        <input type="text" id="name" value="name">
-
-        <label for="api-key">Api-key:</label>
-        <input type="text" id="api-key" name="api-key" required>
-
-        <label for="room-type">Select room type:</label>
-        <select id="room-type" name="room-type" required>
-            <option value='1'>Budget</option>
-            <option value='2'>Standard</option>
-            <option value='3'>Luxury</option>
-            <option value='0'>No room</option>
-        </select>
-
-        <div class="date-wrapper">
-            <div class="arrival-date-wrapper">
-                <label for="arrival-date">Select arrival date:</label>
-                <input type="date" id="arrival-date" name="arrival-date" min="2026-01-01" max="2026-01-31" required>
+    <div class="hero">
+        <div class="container">
+            <h1>Oceanview Resort</h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="rooms">
+            <div class="room">
+                <img src="https://placehold.co/150x150" class="room-image">
+                <div class="room-copy">
+                    <h3 class="room-title">Budget</h3>
+                    <div class="room-description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa quasi accusantium ipsam exercitationem! Exercitationem, ex.</div>
+                </div>
             </div>
-            <div class="departure-date-wrapper">
-                <label for="departure-date">Select departure date:</label>
-                <input type="date" id="departure-date" name="departure-date" min="2026-01-02" max="2026-01-31" required>
+            <div class="room">
+                <img src="https://placehold.co/150x150" class="room-image">
+                <div class="room-copy">
+                    <h3 class="room-title">Standard</h3>
+                    <div class="room-description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa quasi accusantium ipsam exercitationem! Exercitationem, ex.</div>
+                </div>
+            </div>
+            <div class="room">
+                <img src="https://placehold.co/150x150" class="room-image">
+                <div class="room-copy">
+                    <h3 class="room-title">Luxury</h3>
+                    <div class="room-description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa quasi accusantium ipsam exercitationem! Exercitationem, ex.</div>
+                </div>
             </div>
         </div>
 
-        <button type="submit">Book Now</button>
-    </form>
+        <div class="book">
+            <h2>Book your stay</h2>
+        </div>
+    </div>
+    </div>
 </body>
 
 </html>

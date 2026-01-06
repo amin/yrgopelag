@@ -1,0 +1,38 @@
+:root {
+
+}
+
+body {
+    background-color: #6FB4F2;
+}
+
+.container {
+    margin: 0 auto;
+    width: 90%;
+}
+
+.rooms {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    @media screen and (min-width: 768px) {
+        flex-direction: row;
+    }
+}
+
+.room {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+      @media screen and (min-width: 768px) {
+        flex: 1 1 calc(50% - 1rem);   
+    }
+}
+
+.book {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    margin-top: 2rem;
+}
