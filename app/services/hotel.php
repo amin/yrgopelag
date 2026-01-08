@@ -1,21 +1,20 @@
 <?php
 
-function _checkRoomAvailability(string $roomType, string $arrivalDate, string $departureDate): bool
+function _checkRoomAvailability(int $roomId, string $arrivalDate, string $departureDate): bool
 {
     $pdo = getDb();
 
     $sql = "
         SELECT COUNT(*)
-        FROM bookings b
-        JOIN rooms r ON b.room_id = r.id
-        WHERE r.type = :room_type
-        AND b.arrival_date < :departure_date
-        AND b.departure_date> :arrival_date
+        FROM bookings
+        WHERE room_id = :room_id
+        AND arrival_date < :departure_date
+        AND departure_date > :arrival_date
     ";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        ':room_type' => $roomType,
+        ':room_id' => $roomId,
         ':arrival_date' => $arrivalDate,
         ':departure_date' => $departureDate
     ]);
@@ -24,11 +23,43 @@ function _checkRoomAvailability(string $roomType, string $arrivalDate, string $d
 }
 
 
-function createBookingRequest(string $guestName, string $apiKey, string $roomType, string $arrivalDate, string $departureDate, array $features = [])
+function _calculateBookingPrice(int $roomId, string $arrivalDate, string $departureDate, array $features): int
+{
+    $pdo = getDb();
+    $totalPrice = 0;
+
+    $stmt = $pdo->prepare("SELECT price FROM rooms WHERE id = :room_id");
+    $stmt->execute([':room_id' => $roomId]);
+    $roomPrice = $stmt->fetchColumn();
+
+    $arrival = new DateTime($arrivalDate);
+    $departure = new DateTime($departureDate);
+    $nights = $arrival->diff($departure)->days;
+
+    $totalPrice += $roomPrice * $nights;
+
+    foreach ($features as $feature) {
+        $stmt = $pdo->prepare("SELECT price FROM tier_pricing WHERE tier = :tier");
+        $stmt->execute([':tier' => $feature['tier']]);
+        $tierPrice = $stmt->fetchColumn();
+
+        if ($tierPrice) {
+            $totalPrice += $tierPrice * $nights;
+        }
+    }
+
+    return $totalPrice;
+}
+
+function createBookingRequest(string $guestName, string $apiKey, int $roomId, string $arrivalDate, string $departureDate, array $features = [])
 {
     $pdo = getDb();
 
-    if (!_checkRoomAvailability($roomType, $arrivalDate, $departureDate)) {
+    if (!_checkRoomAvailability($roomId, $arrivalDate, $departureDate)) {
+        echo json_encode(['error' => 'Room is not available']);
         return null;
     }
+
+    $bookingPrice = _calculateBookingPrice($roomId, $arrivalDate, $departureDate, $features);
+    echo 'Room is available';
 }
