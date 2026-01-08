@@ -61,5 +61,19 @@ function createBookingRequest(string $guestName, string $apiKey, int $roomId, st
     }
 
     $bookingPrice = _calculateBookingPrice($roomId, $arrivalDate, $departureDate, $features);
+    $guestAccountBalance = getAccountBalance($guestName, $apiKey);
+
+    if ($bookingPrice > $guestAccountBalance) {
+        echo json_encode(['Error' => 'Your balance is too low to complete this booking.']);
+        return null;
+    }
+
+    $transferCode = createTransferCode($guestName, $apiKey, $bookingPrice)['transferCode'];
+    $checkTransfer = depositTransferCode($transferCode);
+
+    if ($checkTransfer['status'] !== 'success') {
+        echo json_encode(['Error' => 'Something went wrong.']);
+        return null;
+    }
     echo 'Room is available';
 }
