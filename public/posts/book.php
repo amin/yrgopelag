@@ -1,38 +1,57 @@
 <?php
 
 declare(strict_types=1);
-
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../app/bootstrap.php';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $guestName = $_POST['guest_name'] ?? '';
+    $apiKey = $_POST['api_key'] ?? '';
+    $roomId = (int) ($_POST['room_id'] ?? 0);
+    $arrivalDate = $_POST['arrival_date'] ?? '';
+    $departureDate = $_POST['departure_date'] ?? '';
 
-createBookingRequest('Rune', 'f40f9feb-ae8f-4cdd-983b-d222e94bfd3d', 1, '2026-01-10', '2026-01-12',  [['activity' => 'dining', 'tier' => 'superior']]);
+    $features = [];
+    if (!empty($_POST['features'])) {
+        foreach ($_POST['features'] as $feature) {
+            $parts = explode('|', $feature);
+            if (count($parts) === 2) {
+                $features[] = [
+                    'activity' => $parts[0],
+                    'tier' => $parts[1]
+                ];
+            }
+        }
+    }
 
+    createBookingRequest($guestName, $apiKey, $roomId, $arrivalDate, $departureDate, $features);
+}
 
 function createBookingRequest(string $guestName, string $apiKey, int $roomId, string $arrivalDate, string $departureDate, array $features = [])
 {
-    $pdo = getDb();
-
-    if (!_checkRoomAvailability($roomId, $arrivalDate, $departureDate)) {
-        echo json_encode(['error' => 'Room is not available']);
-        return null;
+    if (!checkRoomAvailability($roomId, $arrivalDate, $departureDate)) {
+        header('Location: /?error=not_available');
+        exit;
     }
 
-    $bookingPrice = _calculateBookingPrice($roomId, $arrivalDate, $departureDate, $features);
+    $bookingPrice = calculateBookingPrice($roomId, $arrivalDate, $departureDate, $features);
     $guestAccountBalance = getAccountBalance($guestName, $apiKey);
 
     if ($bookingPrice > $guestAccountBalance) {
-        echo json_encode(['Error' => 'Your balance is too low to complete this booking.']);
-        return null;
+        header('Location: /?error=low_balance');
+        exit;
     }
 
     // $transferCode = createTransferCode($guestName, $apiKey, $bookingPrice)['transferCode'];
     // $checkTransfer = depositTransferCode($transferCode);
 
     // if ($checkTransfer['status'] !== 'success') {
-    //     echo json_encode(['Error' => 'Something went wrong.']);
-    //     return null;
+    //     header('Location: /?error=1');
+    //     exit;
     // }
 
-    echo 'Room is available';
+    $bookingId = createBooking($roomId, $guestName, $arrivalDate, $departureDate, $bookingPrice, $features);
+
+    header('Location: /?success=1');
+    exit;
 }
