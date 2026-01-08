@@ -70,7 +70,6 @@ function createBooking(int $roomId, string $guestName, string $arrivalDate, stri
 
     $bookingId = (int) $pdo->lastInsertId();
 
-    // Insert booking features
     $arrival = new DateTime($arrivalDate);
     $departure = new DateTime($departureDate);
     $nights = $arrival->diff($departure)->days;
