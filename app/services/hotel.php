@@ -94,3 +94,41 @@ function createBooking(int $roomId, string $guestName, string $arrivalDate, stri
 
     return $bookingId;
 }
+
+function getFeatureTierPricing(): array
+{
+    $pdo = getDb();
+    $stmt = $pdo->query("SELECT tier, price FROM tier_pricing");
+    return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+}
+
+function getRoomPricing(): array
+{
+    $pdo = getDb();
+    $stmt = $pdo->query("SELECT id, type, price FROM rooms");
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getBookedDatesByRoom(): array
+{
+    $pdo = getDb();
+    $stmt = $pdo->query("
+        SELECT 
+            r.type as room_type,
+            b.arrival_date,
+            b.departure_date
+        FROM bookings b
+        JOIN rooms r ON b.room_id = r.id
+    ");
+    $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $grouped = [];
+
+    foreach ($bookings as $booking) {
+        $grouped[$booking['room_type']][] = [
+            'arrival_date' => $booking['arrival_date'],
+            'departure_date' => $booking['departure_date']
+        ];
+    }
+
+    return $grouped;
+}
