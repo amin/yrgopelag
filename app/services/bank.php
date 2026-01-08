@@ -45,6 +45,22 @@ function listIslandProperties(): array
     );
 }
 
+function createReceipt(string $guestName, string $arrivalDate, string $departureDate, array $features): array
+{
+    return _postToCentralbank(
+        'receipt',
+        [
+            'user' => $_ENV['CENTRALBANK_USER'],
+            'api_key' => $_ENV['CENTRALBANK_API_KEY'],
+            'guest_name' => $guestName,
+            'arrival_date' => $arrivalDate,
+            'departure_date' => $departureDate,
+            'features_used' => $features,
+            'star_rating' => 5
+        ]
+    );
+}
+
 function setIslandProperties(...$props): array
 {
     $properties = listIslandProperties();
