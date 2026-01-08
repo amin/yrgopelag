@@ -19,5 +19,6 @@ CREATE TABLE if NOT exists booking_features (
     id SERIAL PRIMARY KEY,
     booking_id INT REFERENCES bookings(id),
     activity VARCHAR(20) NOT NULL,
-    tier VARCHAR(20) NOT NULL
+    tier VARCHAR(20) NOT NULL,
+    price INT NOT NULL DEFAULT 0
 );
