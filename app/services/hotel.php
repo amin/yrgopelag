@@ -50,30 +50,3 @@ function _calculateBookingPrice(int $roomId, string $arrivalDate, string $depart
 
     return $totalPrice;
 }
-
-function createBookingRequest(string $guestName, string $apiKey, int $roomId, string $arrivalDate, string $departureDate, array $features = [])
-{
-    $pdo = getDb();
-
-    if (!_checkRoomAvailability($roomId, $arrivalDate, $departureDate)) {
-        echo json_encode(['error' => 'Room is not available']);
-        return null;
-    }
-
-    $bookingPrice = _calculateBookingPrice($roomId, $arrivalDate, $departureDate, $features);
-    $guestAccountBalance = getAccountBalance($guestName, $apiKey);
-
-    if ($bookingPrice > $guestAccountBalance) {
-        echo json_encode(['Error' => 'Your balance is too low to complete this booking.']);
-        return null;
-    }
-
-    $transferCode = createTransferCode($guestName, $apiKey, $bookingPrice)['transferCode'];
-    $checkTransfer = depositTransferCode($transferCode);
-
-    if ($checkTransfer['status'] !== 'success') {
-        echo json_encode(['Error' => 'Something went wrong.']);
-        return null;
-    }
-    echo 'Room is available';
-}
