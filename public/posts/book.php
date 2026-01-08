@@ -50,6 +50,11 @@ function createBookingRequest(string $guestName, string $apiKey, int $roomId, st
     //     exit;
     // }
 
+    // $receipt = createReceipt($guestName, $arrivalDate, $departureDate, $features);
+    // if (!isset($receipt['receipt_id'])) {
+    //     echo 'Something went wrong';
+    // }
+
     $bookingId = createBooking($roomId, $guestName, $arrivalDate, $departureDate, $bookingPrice, $features);
 
     header('Location: /?success=1');
