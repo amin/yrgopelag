@@ -71,13 +71,13 @@ function setIslandProperties(...$props): array
 }
 
 
-function getAccountBalance(): array
+function getAccountBalance(?string $user = null, ?string $api_key = null): array
 {
     return _postToCentralbank(
         'accountInfo',
         [
-            'user' => $_ENV['CENTRALBANK_USER'],
-            'api_key' => $_ENV['CENTRALBANK_API_KEY']
+            'user' => $user ?? $_ENV['CENTRALBANK_USER'],
+            'api_key' => $api_key ?? $_ENV['CENTRALBANK_API_KEY'],
         ]
     );
 }
