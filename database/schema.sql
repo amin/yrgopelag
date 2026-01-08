@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS bookings (
     guest_name VARCHAR(100) NOT NULL,
     arrival_date DATE NOT NULL,
     departure_date DATE NOT NULL,
-    transfer_code VARCHAR(255),
     total_cost INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
