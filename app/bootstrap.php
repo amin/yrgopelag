@@ -3,6 +3,7 @@
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->safeLoad();
 
+session_start();
 
 if (($_ENV['DEV'] ?? '') === '1') {
     ini_set('display_errors', '1');
