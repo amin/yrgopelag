@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $guestName = trim($_POST['guest_name'] ?? '');
     $apiKey = trim($_POST['api_key'] ?? '');
-    $roomId = filter_var($_POST['room_id'], FILTER_VALIDATE_INT);
+    $roomId = filter_var($_POST['room_id'] ?? null, FILTER_VALIDATE_INT);
     $arrivalDate = trim($_POST['arrival_date'] ?? '');
     $departureDate = trim($_POST['departure_date'] ?? '');
 
