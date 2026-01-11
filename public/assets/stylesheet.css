@@ -11,16 +11,21 @@ body {
     display: flex;
     align-items: top;
     gap: 2rem;
-    justify-content: space-between;
 }
 
 .book__calendar {
-  max-width: 450px;
-  max-height: 300px;
+  max-width: 400px;
+  max-height: 250px;
   width: 50%;
   text-align: center;
   background: #fff;
   padding: 1rem;
+}
+
+.book__calendar caption {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
 }
 
 .booked {
@@ -64,7 +69,7 @@ button[type="submit"] {
 }
 
 .book__form {
-    width: 300px;
+    width: 450px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -78,4 +83,29 @@ select {
     padding: 0.75rem;
 }
 
+.alert {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
 
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-failure {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.alert p {
+    margin: 0;
+}
+
+.alert p + p {
+    margin-top: 0.5rem;
+}

@@ -4,7 +4,8 @@ require_once __DIR__ . "/../app/bootstrap.php";
 
 $hotelProperties = getIslandProperties();
 $hotelName = h($hotelProperties['island']['hotelName'] ?? 'Hotel');
-
+$receipt = flashReceipt();
+$errors = flashErrors();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,76 +18,56 @@ $hotelName = h($hotelProperties['island']['hotelName'] ?? 'Hotel');
 </head>
 
 <body>
-    <div class="hero">
+    <header class="hero">
         <div class="container">
             <h1><?= $hotelName ?></h1>
         </div>
-    </div>
-    <div class="container">
+    </header>
 
-        <div class="container">
-            <?php $receipt = flashReceipt(); ?>
-            <?php if ($receipt): ?>
-                <div class="alert alert-success">
-                    <?= h(var_export($receipt, true)); ?>
-                    Booking successful.
-                </div>
-            <?php endif; ?>
-        </div>
+    <main class="container">
+
+        <?php if ($receipt): ?>
+            <div class="alert alert-success" role="alert">
+                <h2>Booking successful!</h2>
+                <p><strong>Receipt ID:</strong> <?= h($receipt['receipt_id']) ?></p>
+                <p><strong>Room:</strong> <?= h(ucfirst($receipt['room_type'])) ?></p>
+                <p><strong>Arrival:</strong> <?= h($receipt['arrival_date']) ?></p>
+                <p><strong>Departure:</strong> <?= h($receipt['departure_date']) ?></p>
+                <?php if (!empty($receipt['features'])): ?>
+                    <p><strong>Features:</strong> <?= h(implode(', ', $receipt['features'])) ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+
+        <?php foreach ($errors as $error): ?>
+            <div class="alert alert-failure" role="alert">
+                <p><?= h($error) ?></p>
+            </div>
+        <?php endforeach; ?>
 
         <section class="rooms">
             <?php foreach (["Budget", "Standard", "Luxury"] as $room): ?>
-                <div class="room">
-                    <img src="https://placehold.co/150x150" class="room-image">
+                <article class="room">
+                    <img src="https://placehold.co/150x150" class="room-image" alt="<?= h($room) ?> room">
                     <div class="room-copy">
                         <h3 class="room-title"><?= h($room) ?></h3>
-                        <div class="room-description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa quasi accusantium ipsam exercitationem! Exercitationem, ex.</div>
+                        <p class="room-description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa quasi accusantium ipsam exercitationem! Exercitationem, ex.</p>
                     </div>
-                </div>
+                </article>
             <?php endforeach; ?>
         </section>
 
         <section class="book">
-
-            <div class="errors">
-                <?php
-                foreach (flashErrors() as $error) {
-                    echo "<p>" . h($error) . "</p>";
-                }
-                ?>
-            </div>
-
-            <div class="book__heading">
+            <header class="book__heading">
                 <h2>Book your stay</h2>
-                <h3>January 2026</h3>
-            </div>
-            <div class="book__group">
-                <table class="book__calendar">
-                    <thead>
-                        <tr>
-                            <?php foreach (["S", "M", "T", "W", "T", "F", "S"] as $day): ?>
-                                <th><?= h($day) ?></th>
-                            <?php endforeach; ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $cells = array_merge(array_fill(0, 4, ""), range(1, 31));
-                        foreach (array_chunk($cells, 7) as $week): ?>
-                            <tr>
-                                <?php foreach ($week as $day): ?>
-                                    <td data-date="<?= h(str_pad($day, 2, '0', STR_PAD_LEFT)) ?>"><?= h($day) ?></td>
-                                <?php endforeach; ?>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+            </header>
 
+            <div class="book__group">
                 <form class="book__form" method="post" action="/posts/book.php">
                     <label for="room_id">Room Type</label>
-                    <select id="room_id" name="room_id">
+                    <select id="room_id" name="room_id" required>
                         <?php $rooms = getRoomPricing(); ?>
-                        <?php foreach ($rooms as $room) : ?>
+                        <?php foreach ($rooms as $room): ?>
                             <option data-price="<?= h($room['price']) ?>" value="<?= h($room['id']) ?>">
                                 <?= h(ucfirst($room['type'])) ?> - <?= h($room['price']) ?>c / night
                             </option>
@@ -94,24 +75,21 @@ $hotelName = h($hotelProperties['island']['hotelName'] ?? 'Hotel');
                     </select>
 
                     <label for="guest_name">Guest Name</label>
-                    <input type="text" id="guest_name" name="guest_name" placeholder="Guest">
+                    <input type="text" id="guest_name" name="guest_name" placeholder="Guest" required>
 
                     <label for="api_key">API Key</label>
-                    <input type="text" id="api_key" name="api_key" placeholder="API Key">
-
+                    <input type="text" id="api_key" name="api_key" placeholder="API Key" required>
 
                     <label for="arrival_date">Arrival Date</label>
-                    <input type="date" id="arrival_date" name="arrival_date" min="2024-01-01" max="2026-01-31" value="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" id="arrival_date" name="arrival_date" min="2024-01-01" max="2026-01-31" value="<?php echo date('Y-m-d'); ?>" required>
 
                     <label for="departure_date">Departure Date</label>
-                    <input type="date" id="departure_date" name="departure_date" min="2024-01-01" max="2026-01-31" value="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
+                    <input type="date" id="departure_date" name="departure_date" min="2024-01-01" max="2026-01-31" value="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" required>
 
-                    <?php
-                    $features = $hotelProperties['features'] ?? [];
-                    ?>
+                    <?php $features = $hotelProperties['features'] ?? []; ?>
 
                     <fieldset>
-                        <legend>Features </legend>
+                        <legend>Features</legend>
 
                         <?php if (empty($features)): ?>
                             <p>No features available.</p>
@@ -133,16 +111,38 @@ $hotelName = h($hotelProperties['island']['hotelName'] ?? 'Hotel');
                         <?php endif; ?>
                     </fieldset>
 
-                    <div class="total-price">
+                    <output class="total-price" for="room_id arrival_date departure_date">
                         <span>Total Price:</span>
                         <span id="total_price">0 credits</span>
-                    </div>
+                    </output>
 
                     <button type="submit">Book Now</button>
                 </form>
+                <table class="book__calendar" aria-label="January 2026 availability calendar">
+                    <caption>January 2026</caption>
+                    <thead>
+                        <tr>
+                            <?php foreach (["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as $day): ?>
+                                <th scope="col" abbr="<?= h($day) ?>"><?= h(substr($day, 0, 1)) ?></th>
+                            <?php endforeach; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $cells = array_merge(array_fill(0, 4, ""), range(1, 31));
+                        foreach (array_chunk($cells, 7) as $week): ?>
+                            <tr>
+                                <?php foreach ($week as $day): ?>
+                                    <td data-date="<?= h(str_pad($day, 2, '0', STR_PAD_LEFT)) ?>"><?= h($day) ?></td>
+                                <?php endforeach; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </section>
-    </div>
+    </main>
+
     <script src="/assets/app.js"></script>
 </body>
 
