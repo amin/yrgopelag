@@ -112,7 +112,7 @@ function depositTransferCode(string $transferCode): array
     );
 }
 
-function createReceipt(string $guestName, string $arrivalDate, string $departureDate, array $features): array
+function createReceipt(string $guestName, string $arrivalDate, string $departureDate, array $features = []): array
 {
     return _postToCentralbank(
         'receipt',
