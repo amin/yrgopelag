@@ -45,7 +45,7 @@ $errors = flashErrors();
         <section class="rooms">
             <?php foreach (getRooms() as $room): ?>
                 <article class="room">
-                    <img src="assets/images/<?= $room['type'] ?>.jpg" class="room-image" ?>
+                    <img src="assets/images/<?= h($room['type']) ?>.jpg" class="room-image" ?>
                     <div class="room-copy">
                         <h3 class="room-title"><?= h(ucfirst($room['type'])); ?></h3>
                         <p class="room-description"><?= h($room['description']) ?></p>
