@@ -9,7 +9,6 @@ function getDb(): PDO
     if ($pdo === null) {
         $dbPath = __DIR__ . '/../../database/yrgopelag.sqlite';
 
-
         $pdo = new PDO(
             "sqlite:$dbPath",
             null,

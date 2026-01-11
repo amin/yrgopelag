@@ -9,9 +9,9 @@ function flashErrors(): array
     return $errors;
 }
 
-function flashReceipt(): ?array
+function flashReceipt(): array
 {
-    $receipt = $_SESSION['receipt'] ?? null;
+    $receipt = $_SESSION['receipt'] ?? [];
     unset($_SESSION['receipt']);
     return $receipt;
 }
