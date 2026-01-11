@@ -52,7 +52,7 @@ function getIslandProperties(): array
 
 function setIslandProperties(...$props): array
 {
-    $properties = listIslandProperties();
+    $properties = getIslandProperties();
     $features = [];
 
     foreach ($props as $key => $value) {
