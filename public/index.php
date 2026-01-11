@@ -34,9 +34,6 @@ $errors = flashErrors();
                 <p><strong>Room:</strong> <?= h(ucfirst($receipt['room_type'])) ?></p>
                 <p><strong>Arrival:</strong> <?= h($receipt['arrival_date']) ?></p>
                 <p><strong>Departure:</strong> <?= h($receipt['departure_date']) ?></p>
-                <?php if (!empty($receipt['features'])): ?>
-                    <p><strong>Features:</strong> <?= h(implode(', ', $receipt['features'])) ?></p>
-                <?php endif; ?>
             </div>
         <?php endif; ?>
 
