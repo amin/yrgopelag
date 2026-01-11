@@ -46,13 +46,6 @@ This web application allows guests to browse rooms, check availability, and book
 
 6. Open http://localhost:8000 in your browser
 
-## Features
-
-- Three room types: Budget, Standard, and Luxury
-- Booking calendar for January 2026
-- Integration with Yrgopelag Central Bank for payments
-- Room availability display
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
