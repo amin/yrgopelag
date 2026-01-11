@@ -41,9 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (empty($errors)) {
-        createBookingRequest($guestName, $apiKey, $roomId, $arrivalDate, $departureDate, $features);
+    if (!empty($errors)) {
+        $_SESSION['errors'] = $errors;
+        header('Location: /');
+        exit;
     }
+
+    createBookingRequest($guestName, $apiKey, $roomId, $arrivalDate, $departureDate, $features);
 }
 
 function createBookingRequest(string $guestName, string $apiKey, int $roomId, string $arrivalDate, string $departureDate, array $features = [])
