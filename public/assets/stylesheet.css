@@ -1,9 +1,32 @@
 :root {
+    font-family: sans-serif;
 
 }
 
 body {
     background-color: #6FB4F2;
+}
+
+.book__group {
+    display: flex;
+    align-items: top;
+    gap: 2rem;
+    justify-content: space-between;
+}
+
+.book__calendar {
+  max-width: 450px;
+  max-height: 300px;
+  width: 50%;
+  text-align: center;
+  background: #fff;
+  padding: 1rem;
+}
+
+.booked {
+    background: brown;
+    border-radius: 1rem;
+    color: #fff;
 }
 
 .container {
@@ -30,9 +53,30 @@ body {
     }
 }
 
-.book {
-    background-color: #fff;
+input[type="text"], input[type="date"] {
+    padding: 1rem;
     border-radius: 0.5rem;
-    padding: 1rem 2rem;
-    margin-top: 2rem;
+    border: 1px solid #ccc;
+    width: 200px;
 }
+
+button[type="submit"] {
+    padding: 1rem;
+}
+
+.book__form {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #fff;
+}
+
+select {
+    width: 200px;
+    padding: 0.75rem;
+}
+
+
