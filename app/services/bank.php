@@ -96,7 +96,7 @@ function createTransferCode(?string $user = null, ?string $api_key = null, ?int 
             'api_key' => $api_key ?? $_ENV['CENTRALBANK_API_KEY'],
             'amount' => $amount
         ],
-        "Could not create transfer code - check your details or balance"
+        "Could not create transfer code - check your account details or balance"
     );
 }
 
@@ -125,6 +125,6 @@ function createReceipt(string $guestName, string $arrivalDate, string $departure
             'features_used' => $features,
             'star_rating' => 5
         ],
-        "Could not create receipt"
+        "A receipt for this stay has already been registered. Please try another date."
     );
 }
