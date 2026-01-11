@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
   const select = document.querySelector("select");
   const cells = document.querySelectorAll("td[data-date]");
   const arrivalDate = document.getElementById("arrival_date");
@@ -8,14 +8,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
   const totalDisplay = document.getElementById("total_price");
 
-  const response = await fetch("/api/getPricing.php");
-  const pricing = await response.json();
-
   function calculateTotal() {
     let total = 0;
-    const roomId = parseInt(select.value);
-    const room = pricing.rooms.find((r) => r.id === roomId);
-    const roomPrice = room ? room.price : 0;
+
+    const selectedOption = select.options[select.selectedIndex];
+    const roomPrice = parseInt(selectedOption.dataset.price) || 0;
 
     const arrival = new Date(arrivalDate.value);
     const departure = new Date(departureDate.value);
@@ -27,12 +24,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     featureCheckboxes.forEach((cb) => {
       if (cb.checked) {
-        const tier = cb.dataset.tier;
-        total += pricing.features[tier] * nights || 0;
+        total += (parseInt(cb.dataset.price) || 0) * nights;
       }
     });
 
-    totalDisplay.textContent = `$${total.toFixed(2)}`;
+    totalDisplay.textContent = `${total} credits`;
   }
 
   async function updateCalendar() {
@@ -55,6 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     calculateTotal();
     updateCalendar();
   });
+
   arrivalDate.addEventListener("change", calculateTotal);
   departureDate.addEventListener("change", calculateTotal);
   featureCheckboxes.forEach((cb) =>

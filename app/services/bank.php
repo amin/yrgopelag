@@ -38,7 +38,7 @@ function getIslands(): array
     return _fetchFromCentralbank('islands');
 }
 
-function listIslandProperties(): array
+function getIslandProperties(): array
 {
     return _postToCentralbank(
         'islandFeatures',

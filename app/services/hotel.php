@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+function getRoomNameById(int $id): string
+{
+    $pdo = getDb();
+    $stmt = $pdo->prepare("SELECT type FROM rooms WHERE id = :id");
+    $stmt->execute([':id' => $id]);
+    $type = $stmt->fetchColumn();
+    return $type;
+}
+
 function checkRoomAvailability(int $roomId, string $arrivalDate, string $departureDate): bool
 {
     $pdo = getDb();

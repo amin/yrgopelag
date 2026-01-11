@@ -4,9 +4,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../app/bootstrap.php';
 
-
-$features = ['water|economy'];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = [];
@@ -62,7 +59,14 @@ function createBookingRequest(string $guestName, string $apiKey, int $roomId, st
         $transferCode = createTransferCode($guestName, $apiKey, $bookingPrice)['transferCode'];
         depositTransferCode($transferCode);
         $receipt = createReceipt($guestName, $arrivalDate, $departureDate, $features);
-        $_SESSION['receipt'] = $receipt;
+
+        $_SESSION['receipt'] = array_merge($receipt, [
+            'arrival_date' => $arrivalDate,
+            'departure_date' => $departureDate,
+            'features' => $features,
+            'room_type' => getRoomNameById($roomId)
+        ]);
+
         createBooking($roomId, $guestName, $arrivalDate, $departureDate, $bookingPrice, $features);
 
         header('Location: /');
@@ -72,10 +76,8 @@ function createBookingRequest(string $guestName, string $apiKey, int $roomId, st
         header('Location: /');
         exit;
     } catch (Exception $e) {
-        $_SESSION['errors'][] = $e->getMessage();  // API errors are safe to show
+        $_SESSION['errors'][] = $e->getMessage();
         header('Location: /');
         exit;
     }
 }
-
-//f40f9feb-ae8f-4cdd-983b-d222e94bfd3d

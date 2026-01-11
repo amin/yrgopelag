@@ -2,8 +2,8 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . "/../app/bootstrap.php";
 
-$hotelProperties = listIslandProperties();
-$hotelName = htmlspecialchars($hotelProperties['island']['hotelName'] ?? 'Hotel');
+$hotelProperties = getIslandProperties();
+$hotelName = h($hotelProperties['island']['hotelName'] ?? 'Hotel');
 
 ?>
 <!DOCTYPE html>
@@ -24,23 +24,22 @@ $hotelName = htmlspecialchars($hotelProperties['island']['hotelName'] ?? 'Hotel'
     </div>
     <div class="container">
 
-        <section class="receipt">
-            <div class="container">
-                <?php $receipt = flashReceipt(); ?>
-                <?php if ($receipt): ?>
-                    <div class="receipt">
-                        <?= var_dump($receipt); ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </section>
+        <div class="container">
+            <?php $receipt = flashReceipt(); ?>
+            <?php if ($receipt): ?>
+                <div class="alert alert-success">
+                    <?= h(var_export($receipt, true)); ?>
+                    Booking successful.
+                </div>
+            <?php endif; ?>
+        </div>
 
         <section class="rooms">
             <?php foreach (["Budget", "Standard", "Luxury"] as $room): ?>
                 <div class="room">
                     <img src="https://placehold.co/150x150" class="room-image">
                     <div class="room-copy">
-                        <h3 class="room-title"><?= $room ?></h3>
+                        <h3 class="room-title"><?= h($room) ?></h3>
                         <div class="room-description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa quasi accusantium ipsam exercitationem! Exercitationem, ex.</div>
                     </div>
                 </div>
@@ -52,7 +51,7 @@ $hotelName = htmlspecialchars($hotelProperties['island']['hotelName'] ?? 'Hotel'
             <div class="errors">
                 <?php
                 foreach (flashErrors() as $error) {
-                    echo "<p>" . htmlspecialchars($error) . "</p>";
+                    echo "<p>" . h($error) . "</p>";
                 }
                 ?>
             </div>
@@ -66,7 +65,7 @@ $hotelName = htmlspecialchars($hotelProperties['island']['hotelName'] ?? 'Hotel'
                     <thead>
                         <tr>
                             <?php foreach (["S", "M", "T", "W", "T", "F", "S"] as $day): ?>
-                                <th><?= $day ?></th>
+                                <th><?= h($day) ?></th>
                             <?php endforeach; ?>
                         </tr>
                     </thead>
@@ -76,7 +75,7 @@ $hotelName = htmlspecialchars($hotelProperties['island']['hotelName'] ?? 'Hotel'
                         foreach (array_chunk($cells, 7) as $week): ?>
                             <tr>
                                 <?php foreach ($week as $day): ?>
-                                    <td data-date="<?= str_pad($day, 2, '0', STR_PAD_LEFT) ?>"><?= $day ?></td>
+                                    <td data-date="<?= h(str_pad($day, 2, '0', STR_PAD_LEFT)) ?>"><?= h($day) ?></td>
                                 <?php endforeach; ?>
                             </tr>
                         <?php endforeach; ?>
@@ -86,9 +85,12 @@ $hotelName = htmlspecialchars($hotelProperties['island']['hotelName'] ?? 'Hotel'
                 <form class="book__form" method="post" action="/posts/book.php">
                     <label for="room_id">Room Type</label>
                     <select id="room_id" name="room_id">
-                        <option value="1">Budget</option>
-                        <option value="2">Standard</option>
-                        <option value="3">Luxury</option>
+                        <?php $rooms = getRoomPricing(); ?>
+                        <?php foreach ($rooms as $room) : ?>
+                            <option data-price="<?= h($room['price']) ?>" value="<?= h($room['id']) ?>">
+                                <?= h(ucfirst($room['type'])) ?> - <?= h($room['price']) ?>c / night
+                            </option>
+                        <?php endforeach; ?>
                     </select>
 
                     <label for="guest_name">Guest Name</label>
@@ -109,21 +111,22 @@ $hotelName = htmlspecialchars($hotelProperties['island']['hotelName'] ?? 'Hotel'
                     ?>
 
                     <fieldset>
-                        <legend>Select Features for <?= $hotelName ?></legend>
+                        <legend>Features </legend>
 
                         <?php if (empty($features)): ?>
                             <p>No features available.</p>
                         <?php else: ?>
+                            <?php $pricing = getFeaturePricing(); ?>
                             <?php foreach ($features as $f): ?>
                                 <div>
                                     <label>
                                         <input
                                             type="checkbox"
                                             name="features[]"
-                                            data-tier="<?= $f['tier'] ?>"
-                                            value="<?= htmlspecialchars($f['activity'] . '|' . $f['tier']) ?>">
-                                        <?= htmlspecialchars($f['feature']) ?>
-                                        (<?= ucwords(str_replace('-', ' ', $f['activity'])) ?> - <?= ucfirst($f['tier']) ?>)
+                                            data-price="<?= h($pricing[$f['tier']]) ?>"
+                                            data-tier="<?= h($f['tier']) ?>"
+                                            value="<?= h($f['activity'] . '|' . $f['tier']) ?>">
+                                        <?= sprintf('%s %sc / night', h($f['feature']), h($pricing[$f['tier']])) ?>
                                     </label>
                                 </div>
                             <?php endforeach; ?>
@@ -132,7 +135,7 @@ $hotelName = htmlspecialchars($hotelProperties['island']['hotelName'] ?? 'Hotel'
 
                     <div class="total-price">
                         <span>Total Price:</span>
-                        <span id="total_price">$0.00</span>
+                        <span id="total_price">0 credits</span>
                     </div>
 
                     <button type="submit">Book Now</button>
