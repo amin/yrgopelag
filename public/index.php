@@ -6,7 +6,6 @@ $hotelProperties = getIslandProperties();
 $hotelName = h($hotelProperties['island']['hotelName'] ?? 'Hotel');
 $receipt = flashReceipt();
 $errors = flashErrors();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +14,7 @@ $errors = flashErrors();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $hotelName ?></title>
-    <link rel="stylesheet" href="/assets/stylesheet.css">
+    <link rel="stylesheet" href="assets/stylesheet.css">
 </head>
 
 <body>
@@ -46,7 +45,7 @@ $errors = flashErrors();
         <section class="rooms">
             <?php foreach (getRooms() as $room): ?>
                 <article class="room">
-                    <img src="/assets/images/<?= $room['type'] ?>.jpg" class="room-image" ?>
+                    <img src="assets/images/<?= $room['type'] ?>.jpg" class="room-image" ?>
                     <div class="room-copy">
                         <h3 class="room-title"><?= h(ucfirst($room['type'])); ?></h3>
                         <p class="room-description"><?= h($room['description']) ?></p>
@@ -61,7 +60,7 @@ $errors = flashErrors();
             </header>
 
             <div class="book__group">
-                <form class="book__form" method="post" action="/posts/book.php">
+                <form class="book__form" method="post" action="posts/book.php">
                     <label for="room_id">Room Type</label>
                     <select id="room_id" name="room_id" required>
                         <?php $rooms = getRoomPricing(); ?>
@@ -141,7 +140,7 @@ $errors = flashErrors();
         </section>
     </main>
 
-    <script src="/assets/app.js"></script>
+    <script src="assets/app.js"></script>
 </body>
 
 </html>

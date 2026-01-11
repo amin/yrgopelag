@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function updateCalendar() {
-    const res = await fetch("/api/getBookings.php");
+    const res = await fetch("api/getBookings.php");
     const data = await res.json();
     const bookings = data[select.value] || [];
 
