@@ -55,7 +55,6 @@ function createBooking(int $roomId, string $guestName, string $arrivalDate, stri
 {
     $pdo = getDb();
 
-    // Insert booking
     $stmt = $pdo->prepare("
         INSERT INTO bookings (room_id, guest_name, arrival_date, departure_date, total_cost)
         VALUES (:room_id, :guest_name, :arrival_date, :departure_date, :total_cost)
@@ -83,6 +82,7 @@ function createBooking(int $roomId, string $guestName, string $arrivalDate, stri
             INSERT INTO booking_features (booking_id, activity, tier, price)
             VALUES (:booking_id, :activity, :tier, :price)
         ");
+
         $stmt->execute([
             ':booking_id' => $bookingId,
             ':activity' => $feature['activity'],
@@ -94,7 +94,7 @@ function createBooking(int $roomId, string $guestName, string $arrivalDate, stri
     return $bookingId;
 }
 
-function getFeatureTierPricing(): array
+function getFeaturePricing(): array
 {
     $pdo = getDb();
     $stmt = $pdo->query("SELECT tier, price FROM tier_pricing");
@@ -108,26 +108,26 @@ function getRoomPricing(): array
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getBookedDatesByRoom(): array
+function getHotelCalendar(): array
 {
     $pdo = getDb();
     $stmt = $pdo->query("
         SELECT 
-            r.type as room_type,
+            r.id as room_id,
             b.arrival_date,
             b.departure_date
         FROM bookings b
         JOIN rooms r ON b.room_id = r.id
     ");
     $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $grouped = [];
+    $bookedDates = [];
 
     foreach ($bookings as $booking) {
-        $grouped[$booking['room_type']][] = [
+        $bookedDates[$booking['room_id']][] = [
             'arrival_date' => $booking['arrival_date'],
             'departure_date' => $booking['departure_date']
         ];
     }
 
-    return $grouped;
+    return $bookedDates;
 }
