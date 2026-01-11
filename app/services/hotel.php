@@ -11,6 +11,15 @@ function getRoomNameById(int $id): string
     return $type;
 }
 
+function getRooms(): array
+{
+    $db = getDb();
+
+    $stmt = $db->query("SELECT * FROM rooms");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
+}
+
 function checkRoomAvailability(int $roomId, string $arrivalDate, string $departureDate): bool
 {
     $pdo = getDb();
