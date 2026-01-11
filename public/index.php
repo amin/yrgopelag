@@ -99,12 +99,12 @@ $hotelName = h($hotelProperties['island']['hotelName'] ?? 'Hotel');
                     <label for="api_key">API Key</label>
                     <input type="text" id="api_key" name="api_key" placeholder="API Key">
 
+
                     <label for="arrival_date">Arrival Date</label>
-                    <input type="date" id="arrival_date" name="arrival_date" min="2024-01-01" max="2026-01-31">
+                    <input type="date" id="arrival_date" name="arrival_date" min="2024-01-01" max="2026-01-31" value="<?php echo date('Y-m-d'); ?>">
 
                     <label for="departure_date">Departure Date</label>
-                    <input type="date" id="departure_date" name="departure_date" min="2024-01-01" max="2026-01-31">
-
+                    <input type="date" id="departure_date" name="departure_date" min="2024-01-01" max="2026-01-31" value="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
 
                     <?php
                     $features = $hotelProperties['features'] ?? [];

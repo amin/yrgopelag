@@ -1,28 +1,30 @@
+PRAGMA foreign_keys = ON;
+
 CREATE TABLE IF NOT EXISTS rooms (
-    id SERIAL PRIMARY KEY,
-    type VARCHAR(20) NOT NULL CHECK (type IN ('budget', 'standard', 'luxury')),
-    price INT NOT NULL
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT NOT NULL CHECK (type IN ('budget', 'standard', 'luxury')),
+    price INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tier_pricing (
-    tier VARCHAR(20) PRIMARY KEY,
-    price INT NOT NULL
+    tier TEXT PRIMARY KEY,
+    price INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS bookings (
-    id SERIAL PRIMARY KEY,
-    room_id INT REFERENCES rooms(id),
-    guest_name VARCHAR(100) NOT NULL,
-    arrival_date DATE NOT NULL,
-    departure_date DATE NOT NULL,
-    total_cost INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    room_id INTEGER REFERENCES rooms(id),
+    guest_name TEXT NOT NULL,
+    arrival_date TEXT NOT NULL,
+    departure_date TEXT NOT NULL,
+    total_cost INTEGER NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS booking_features (
-    id SERIAL PRIMARY KEY,
-    booking_id INT REFERENCES bookings(id),
-    activity VARCHAR(20) NOT NULL,
-    tier VARCHAR(20) REFERENCES tier_pricing(tier),
-    price INT NOT NULL DEFAULT 0
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    booking_id INTEGER REFERENCES bookings(id),
+    activity TEXT NOT NULL,
+    tier TEXT REFERENCES tier_pricing(tier),
+    price INTEGER NOT NULL DEFAULT 0
 );

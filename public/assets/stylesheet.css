@@ -54,10 +54,9 @@ body {
 }
 
 input[type="text"], input[type="date"] {
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 0.5rem;
     border: 1px solid #ccc;
-    width: 200px;
 }
 
 button[type="submit"] {
@@ -65,7 +64,7 @@ button[type="submit"] {
 }
 
 .book__form {
-    width: 100%;
+    width: 300px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;

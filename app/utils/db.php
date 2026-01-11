@@ -6,22 +6,22 @@ function getDb(): PDO
 {
     static $pdo = null;
 
-    $host = $_ENV['DB_HOST'] ?? 'db';
-    $dbname = $_ENV['DB_NAME'];
-    $username = $_ENV['DB_USER'];
-    $password = $_ENV['DB_PASSWORD'];
-
     if ($pdo === null) {
+        $dbPath = __DIR__ . '/../../database/yrgopelag.sqlite';
+
+
         $pdo = new PDO(
-            "pgsql:host=$host;dbname=$dbname",
-            $username,
-            $password,
+            "sqlite:$dbPath",
+            null,
+            null,
             [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             ]
         );
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+
+        $pdo->exec('PRAGMA foreign_keys = ON');
     }
 
     return $pdo;
