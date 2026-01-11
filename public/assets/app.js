@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     featureCheckboxes.forEach((cb) => {
       if (cb.checked) {
-        total += (parseInt(cb.dataset.price) || 0) * nights;
+        total += Math.max(0, (parseInt(cb.dataset.price) || 0) * nights);
       }
     });
 
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const bookings = data[select.value] || [];
 
     cells.forEach((cell) => {
-      const day = parseInt(cell.dataset.date);
+      const day = parseInt(cell.dataset.date.split("-").pop());
       const isBooked = bookings.some((b) => {
         const start = new Date(b.arrival_date).getDate();
         const end = new Date(b.departure_date).getDate();

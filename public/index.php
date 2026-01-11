@@ -6,6 +6,7 @@ $hotelProperties = getIslandProperties();
 $hotelName = h($hotelProperties['island']['hotelName'] ?? 'Hotel');
 $receipt = flashReceipt();
 $errors = flashErrors();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,12 +47,12 @@ $errors = flashErrors();
         <?php endforeach; ?>
 
         <section class="rooms">
-            <?php foreach (["Budget", "Standard", "Luxury"] as $room): ?>
+            <?php foreach (getRooms() as $room): ?>
                 <article class="room">
-                    <img src="https://placehold.co/150x150" class="room-image" alt="<?= h($room) ?> room">
+                    <img src="/assets/images/<?= $room['type'] ?>.jpg" class="room-image" ?>
                     <div class="room-copy">
-                        <h3 class="room-title"><?= h($room) ?></h3>
-                        <p class="room-description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa quasi accusantium ipsam exercitationem! Exercitationem, ex.</p>
+                        <h3 class="room-title"><?= h(ucfirst($room['type'])); ?></h3>
+                        <p class="room-description"><?= h($room['description']) ?></p>
                     </div>
                 </article>
             <?php endforeach; ?>
@@ -133,7 +134,7 @@ $errors = flashErrors();
                         foreach (array_chunk($cells, 7) as $week): ?>
                             <tr>
                                 <?php foreach ($week as $day): ?>
-                                    <td data-date="<?= h(str_pad($day, 2, '0', STR_PAD_LEFT)) ?>"><?= h($day) ?></td>
+                                    <td data-date="2026-01-<?= h(str_pad($day, 2, '0', STR_PAD_LEFT)) ?>"><?= h($day) ?></td>
                                 <?php endforeach; ?>
                             </tr>
                         <?php endforeach; ?>
