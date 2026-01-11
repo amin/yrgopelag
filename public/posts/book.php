@@ -4,59 +4,78 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../app/bootstrap.php';
 
+
+$features = ['water|economy'];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $guestName = $_POST['guest_name'] ?? '';
-    $apiKey = $_POST['api_key'] ?? '';
-    $roomId = (int) ($_POST['room_id'] ?? 0);
-    $arrivalDate = $_POST['arrival_date'] ?? '';
-    $departureDate = $_POST['departure_date'] ?? '';
+
+    $errors = [];
+
+    $guestName = trim($_POST['guest_name'] ?? '');
+    $apiKey = trim($_POST['api_key'] ?? '');
+    $roomId = filter_var($_POST['room_id'], FILTER_VALIDATE_INT);
+    $arrivalDate = trim($_POST['arrival_date'] ?? '');
+    $departureDate = trim($_POST['departure_date'] ?? '');
+
+    if (empty($guestName)) $errors[] = 'Guest name is required';
+    if (empty($apiKey)) $errors[] = 'API key is required';
+    if (empty($arrivalDate)) $errors[] = 'Arrival date is required';
+    if (empty($departureDate)) $errors[] = 'Departure date is required';
+    if ($roomId === false) $errors[] = 'Invalid room ID';
+
+    if (!empty($arrivalDate) && !empty($departureDate) && strtotime($departureDate) <= strtotime($arrivalDate)) {
+        $errors[] = 'Departure date must be after arrival date';
+    }
 
     $features = [];
-    if (!empty($_POST['features'])) {
+
+    if (!empty($_POST['features']) && is_array($_POST['features'])) {
         foreach ($_POST['features'] as $feature) {
             $parts = explode('|', $feature);
             if (count($parts) === 2) {
+                $activity = trim($parts[0]);
+                $tier = trim($parts[1]);
+
                 $features[] = [
-                    'activity' => $parts[0],
-                    'tier' => $parts[1]
+                    'activity' => $activity,
+                    'tier' => $tier
                 ];
             }
         }
     }
 
-    createBookingRequest($guestName, $apiKey, $roomId, $arrivalDate, $departureDate, $features);
+    if (empty($errors)) {
+        createBookingRequest($guestName, $apiKey, $roomId, $arrivalDate, $departureDate, $features);
+    }
 }
 
 function createBookingRequest(string $guestName, string $apiKey, int $roomId, string $arrivalDate, string $departureDate, array $features = [])
 {
     if (!checkRoomAvailability($roomId, $arrivalDate, $departureDate)) {
-        header('Location: /?error=not_available');
+        $_SESSION['errors'][] = 'Room not available.';
+        header('Location: /');
         exit;
     }
 
-    $bookingPrice = calculateBookingPrice($roomId, $arrivalDate, $departureDate, $features);
-    $guestAccountBalance = getAccountBalance($guestName, $apiKey);
+    try {
+        $bookingPrice = calculateBookingPrice($roomId, $arrivalDate, $departureDate, $features);
+        $transferCode = createTransferCode($guestName, $apiKey, $bookingPrice)['transferCode'];
+        depositTransferCode($transferCode);
+        $receipt = createReceipt($guestName, $arrivalDate, $departureDate, $features);
+        $_SESSION['receipt'] = $receipt;
+        createBooking($roomId, $guestName, $arrivalDate, $departureDate, $bookingPrice, $features);
 
-    if ($bookingPrice > $guestAccountBalance) {
-        header('Location: /?error=low_balance');
+        header('Location: /');
+        exit;
+    } catch (PDOException $e) {
+        $_SESSION['errors'][] = "Something went wrong. Please try again.";
+        header('Location: /');
+        exit;
+    } catch (Exception $e) {
+        $_SESSION['errors'][] = $e->getMessage();  // API errors are safe to show
+        header('Location: /');
         exit;
     }
-
-    // $transferCode = createTransferCode($guestName, $apiKey, $bookingPrice)['transferCode'];
-    // $checkTransfer = depositTransferCode($transferCode);
-
-    // if ($checkTransfer['status'] !== 'success') {
-    //     header('Location: /?error=1');
-    //     exit;
-    // }
-
-    // $receipt = createReceipt($guestName, $arrivalDate, $departureDate, $features);
-    // if (!isset($receipt['receipt_id'])) {
-    //     echo 'Something went wrong';
-    // }
-
-    $bookingId = createBooking($roomId, $guestName, $arrivalDate, $departureDate, $bookingPrice, $features);
-
-    header('Location: /?success=1');
-    exit;
 }
+
+//f40f9feb-ae8f-4cdd-983b-d222e94bfd3d
