@@ -78,10 +78,10 @@ $errors = flashErrors();
                     <input type="text" id="api_key" name="api_key" placeholder="API Key" required>
 
                     <label for="arrival_date">Arrival Date</label>
-                    <input type="date" id="arrival_date" name="arrival_date" min="2024-01-01" max="2026-01-31" value="<?php echo date('Y-m-d'); ?>" required>
+                    <input type="date" id="arrival_date" name="arrival_date" min="2026-01-01" max="2026-01-31" value="<?php echo date('Y-m-d'); ?>" required>
 
                     <label for="departure_date">Departure Date</label>
-                    <input type="date" id="departure_date" name="departure_date" min="2024-01-01" max="2026-01-31" value="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" required>
+                    <input type="date" id="departure_date" name="departure_date" min="2026-01-02" max="2026-01-31" value="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" required>
 
                     <?php $features = $hotelProperties['features'] ?? []; ?>
 
@@ -115,27 +115,34 @@ $errors = flashErrors();
 
                     <button type="submit">Book Now</button>
                 </form>
-                <table class="book__calendar" aria-label="January 2026 availability calendar">
-                    <caption>January 2026</caption>
-                    <thead>
-                        <tr>
-                            <?php foreach (["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as $day): ?>
-                                <th scope="col" abbr="<?= h($day) ?>"><?= h(substr($day, 0, 1)) ?></th>
-                            <?php endforeach; ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $cells = array_merge(array_fill(0, 4, ""), range(1, 31));
-                        foreach (array_chunk($cells, 7) as $week): ?>
+                <div class="calendar__guide">
+
+                    <table class="book__calendar" aria-label="January 2026 availability calendar">
+                        <caption>January 2026</caption>
+                        <thead>
                             <tr>
-                                <?php foreach ($week as $day): ?>
-                                    <td data-date="2026-01-<?= h(str_pad($day, 2, '0', STR_PAD_LEFT)) ?>"><?= h($day) ?></td>
+                                <?php foreach (["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as $day): ?>
+                                    <th scope="col" abbr="<?= h($day) ?>"><?= h(substr($day, 0, 1)) ?></th>
                                 <?php endforeach; ?>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $cells = array_merge(array_fill(0, 4, ""), range(1, 31));
+                            foreach (array_chunk($cells, 7) as $week): ?>
+                                <tr>
+                                    <?php foreach ($week as $day): ?>
+                                        <td data-date="2026-01-<?= h(str_pad($day, 2, '0', STR_PAD_LEFT)) ?>"><?= h($day) ?></td>
+                                    <?php endforeach; ?>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <div class="guide">
+                        <div class="block"></div>
+                        <div class="message">Room already booked</div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>

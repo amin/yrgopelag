@@ -13,6 +13,26 @@ body {
     gap: 2rem;
 }
 
+.guide {
+    display: flex;
+    flex-direction: row;
+    height:fit-content;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.calendar__guide {
+    width: 350px;
+}
+
+.block {
+    width: 1.5rem;
+    background-color: brown;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+    border-radius: 0.5rem;
+}
+
 button[type="submit"] {
     text-transform: uppercase;
     font-size: 1rem;
@@ -21,10 +41,8 @@ button[type="submit"] {
 }
 
 .book__calendar {
-  max-width: 400px;
-  max-height: 250px;
   border-radius: 0.5rem;
-  width: 50%;
+  width: inherit;
   text-align: center;
   background: #fff;
   padding: 1rem;
