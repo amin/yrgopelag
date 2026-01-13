@@ -123,7 +123,7 @@ function createReceipt(string $guestName, string $arrivalDate, string $departure
             'arrival_date' => $arrivalDate,
             'departure_date' => $departureDate,
             'features_used' => $features,
-            'star_rating' => 5
+            'star_rating' => 2
         ],
         "A receipt for a stay for your user has already been registered on these dates. Please try another date."
     );
