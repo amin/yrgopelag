@@ -7,6 +7,14 @@ body {
     background-color: #6FB4F2;
 }
 
+h1 {
+    margin-bottom: 0.25rem;
+}
+
+.stars {
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+}
 .book__group {
     display: flex;
     align-items: top;

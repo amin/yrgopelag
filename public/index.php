@@ -21,6 +21,7 @@ $errors = flashErrors();
     <header class="hero">
         <div class="container">
             <h1><?= $hotelName ?></h1>
+            <div class="stars">★★</div>
         </div>
     </header>
 
